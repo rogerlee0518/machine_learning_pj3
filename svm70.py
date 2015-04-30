@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
-import timeit
+from sklearn import svm 
 
 def preprocess():
     """ 
@@ -115,17 +115,11 @@ def blrObjFunction(params, *args):
     n_feature = train_data.shape[1];
     error = 0;
     error_grad = np.zeros((n_feature+1,1));
+    
     ##################
     # YOUR CODE HERE #
     ##################
-    w = params
-    x,t = args
-    w = w.reshape(w.shape[0], 1)
-    x = np.hstack((np.ones((n_data,1)), x))
-    y = sigmoid(np.dot(x,w))
-    error -= np.sum(np.dot(t.T,np.log(y)) + np.dot((1-t).T,np.log(1-y)))
-    error_grad = np.dot(x.T, y-t)
-    error_grad = np.squeeze(np.asarray(error_grad))
+    
     return error, error_grad
 
 def blrPredict(W, data):
@@ -143,16 +137,18 @@ def blrPredict(W, data):
          corresponding feature vector given in data matrix
 
     """
-    label = np.zeros((data.shape[0],1))
+    label = np.zeros((data.shape[0],1));
+    
     ##################
     # YOUR CODE HERE #
     ##################
-    x = np.hstack((np.ones((data.shape[0],1)),data))
-    y = sigmoid(np.dot(x,W))
-    label = y.argmax(axis=1)
-    label = label.reshape(label.shape[0], 1)
+
     return label
 
+def svmFunction(clf):
+    print('Training Accuracy: ' +str(clf.score(train_data, train_label.reshape(train_label.shape[0]))*100) + '%') 
+    print('Testing Accuracy: ' +str(clf.score(test_data, test_label.reshape(test_label.shape[0]))*100) + '%')  
+    print('Validation Accuracy: ' +str(clf.score(validation_data, validation_label.reshape(validation_label.shape[0]))*100) + '%') 
 
 """
 Script for Logistic Regression
@@ -173,9 +169,7 @@ for i in range(n_class):
     T[:,i] = (train_label == i).astype(int).ravel();
     
 # Logistic Regression with Gradient Descent
-
 W = np.zeros((n_feature+1, n_class));
-
 initialWeights = np.zeros((n_feature+1,1));
 opts = {'maxiter' : 50};
 for i in range(n_class):
@@ -206,11 +200,12 @@ print('\n\n--------------SVM-------------------\n\n')
 ##################
 X= train_label.reshape(train_label.shape[0]) 
 
+'''
 print('Linear\n') 
 clf = svm.LinearSVC()
 clf.fit(train_data, X) 
 svmFunction(clf)
-
+#Jason
 print("kernel='rbf', gamma=1.0\n")
 clf=svm.SVC(kernel='rbf', gamma=1.0)
 clf.fit(train_data,X)
@@ -231,6 +226,7 @@ clf=svm.SVC(kernel='rbf', C=10.0)
 clf.fit(train_data,X)
 svmFunction(clf)
 
+#Roger
 print("kernel='rbf', gamma is default, C=20.0\n")
 clf=svm.SVC(kernel='rbf', C=20.0)
 clf.fit(train_data,X)
@@ -251,16 +247,18 @@ clf=svm.SVC(kernel='rbf', C=50.0)
 clf.fit(train_data,X)
 svmFunction(clf)
 
+#Calvin
 print("kernel='rbf', gamma is default, C=60.0\n")
 clf=svm.SVC(kernel='rbf', C=60.0)
 clf.fit(train_data,X)
 svmFunction(clf)
-
+'''
 print("kernel='rbf', gamma is default, C=70.0\n")
 clf=svm.SVC(kernel='rbf', C=70.0)
 clf.fit(train_data,X)
 svmFunction(clf)
 
+'''
 print("kernel='rbf', gamma is default, C=80.0\n")
 clf=svm.SVC(kernel='rbf', C=80.0)
 clf.fit(train_data,X)
@@ -275,3 +273,4 @@ print("kernel='rbf', gamma is default, C=100.0\n")
 clf=svm.SVC(kernel='rbf', C=100.0)
 clf.fit(train_data,X)
 svmFunction(clf)
+'''
