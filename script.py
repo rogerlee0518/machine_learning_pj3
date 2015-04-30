@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
-import timeit
+from sklearn import svm 
 
 def preprocess():
     """ 
@@ -153,6 +153,10 @@ def blrPredict(W, data):
     label = label.reshape(label.shape[0], 1)
     return label
 
+def svmFunction(clf):
+    print('Training Accuracy: ' +str(clf.score(train_data, train_label.reshape(train_label.shape[0]))*100) + '%') 
+    print('Testing Accuracy: ' +str(clf.score(test_data, test_label.reshape(test_label.shape[0]))*100) + '%')  
+    print('Validation Accuracy: ' +str(clf.score(validation_data, validation_label.reshape(validation_label.shape[0]))*100) + '%') 
 
 """
 Script for Logistic Regression
